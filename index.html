@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Markdown to PDF Editor</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js" async></script>
-    <!-- Editor de Markdown -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="./node_modules/mathjax/es5/tex-svg-full.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js"></script>
+    <script src="https://kit.fontawesome.com/4bf0ac964c.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
@@ -19,32 +18,35 @@
 <body>
     <div class="container">
         <div class="header">
+            <img src="MDPDF.png" alt="LogoMDPDF" class="logo">
+            <div class="header-name">
             <h1>MDPDF</h1>
-            <div class="header-info">Documento sin guardar</div>
+        </div>
+            <div class="header-info"><a href="https://github.com/Inled-Group/mdpdf"><i class="fa-brands fa-github"></i></a></div>
         </div>
 
         <div class="ribbon">
             <div class="ribbon-group">
-                <input type="text" id="filename" class="filename-input" placeholder="Nombre del archivo" value="documento">
+                <input type="text" id="filename" class="filename-input" placeholder="Nombre del archivo">
             </div>
             <div class="ribbon-group">
                 <button class="btn btn-primary" onclick="downloadPDF()">
-                    📄 Exportar a PDF
+                    <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
                 </button>
                 <button class="btn" onclick="insertExample()">
-                    📝 Insertar ejemplo
+                    Insertar ejemplo
                 </button>
             </div>
             <div class="ribbon-group">
                 <button class="btn" onclick="clearEditor()">
-                    🗑️ Limpiar todo
+                    <i class="fa-solid fa-trash"></i> Limpiar todo
                 </button>
             </div>
         </div>
 
         <div class="main-content">
             <div class="editor-panel">
-                <div class="panel-header">📝 Editor</div>
+                <div class="panel-header">Editor</div>
                 <textarea id="markdown-input" placeholder="# Mi Documento
 
 Escribe aquí tu contenido en Markdown...
@@ -75,13 +77,13 @@ function ejemplo() {
             </div>
 
             <div class="preview-panel">
-                <div class="panel-header">👁️ Vista previa</div>
+                <div class="panel-header">Vista previa</div>
                 <div id="preview"></div>
             </div>
         </div>
 
         <div class="status-bar">
-            <span>Listo</span>
+            <a href="https://github.com/Inled-Group/mdpdf/pulls">Reportar error</a>
             <span id="word-count">0 palabras</span>
         </div>
     </div>

@@ -22,7 +22,7 @@ body {
 }
 
 .header {
-    background: #0078d4;
+    background: linear-gradient(to right, #5de0e6, #004aad);
     color: white;
     padding: 12px 20px;
     display: flex;
@@ -32,6 +32,10 @@ body {
     flex-shrink: 0;
 }
 
+.logo {
+    width: auto;
+    height: 30px;
+}
 .header h1 {
     font-size: 16px;
     font-weight: 600;
@@ -41,6 +45,12 @@ body {
 .header-info {
     font-size: 14px;
     opacity: 0.9;
+}
+
+.header-name {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .ribbon {
