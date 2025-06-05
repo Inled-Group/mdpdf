@@ -369,6 +369,10 @@ class AdvancedTextRenderer {
       case 'a':
         await this.addStyledText(element, { color: [0, 102, 204] });
         break;
+      case 'br':
+        // Manejar saltos de línea explícitamente
+        this.newLine();
+        break;
       case 'span':
         if (element.classList.contains('math-inline')) {
           await this.addMathInline(element);
@@ -801,30 +805,79 @@ async function processParagraph(pdf, element, margin, y, maxWidth) {
   return renderer.getCurrentY() + 10;
 }
 
-async function processList(pdf, element, margin, y, maxWidth) {
+async function processList(pdf, element, margin, y, maxWidth, level = 0) {
   const isOrdered = element.tagName.toLowerCase() === 'ol';
-  const items = Array.from(element.querySelectorAll('li'));
+  const items = Array.from(element.querySelectorAll(':scope > li')); // Solo seleccionar items directos
   let itemNumber = 1;
   
+  // Calcular la sangría basada en el nivel de anidación
+  const indentSize = 10;
+  const currentIndent = margin + (level * indentSize);
+  const textIndent = currentIndent + indentSize;
+  
   for (let item of items) {
-    const renderer = new AdvancedTextRenderer(pdf, margin + 10, y, margin + maxWidth - 10);
-    renderer.setFont(11, 'normal', 'normal');
-    pdf.setTextColor(0, 0, 0);
+    // Verificar si necesitamos nueva página
+    if (y > 277) { // 297 (altura A4) - 20 (margen)
+      pdf.addPage();
+      y = 20; // margen superior
+    }
     
-    // Dibujar el marcador
+    // Separar el contenido de texto de las sublistas
+    const textContent = [];
+    const nestedLists = [];
+    
+    // Procesar cada nodo hijo para separar texto y sublistas
+    Array.from(item.childNodes).forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (node.textContent.trim()) {
+          textContent.push(node);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.tagName === 'UL' || node.tagName === 'OL') {
+          nestedLists.push(node);
+        } else {
+          textContent.push(node);
+        }
+      }
+    });
+    
+    // Dibujar el marcador según el tipo de lista
     if (isOrdered) {
-      pdf.text(`${itemNumber}.`, margin, y);
+      pdf.text(`${itemNumber}.`, currentIndent, y);
       itemNumber++;
     } else {
       pdf.setFillColor(0, 0, 0);
-      pdf.circle(margin + 3, y - 2, 1, 'F');
+      pdf.circle(currentIndent + 3, y - 2, 1, 'F');
     }
     
-    await renderer.addInlineContent(item);
-    y = renderer.getCurrentY() + 5;
+    // Crear un contenedor temporal para el contenido de texto
+    const tempContainer = document.createElement('div');
+    textContent.forEach(node => tempContainer.appendChild(node.cloneNode(true)));
+    
+    // Renderizar el contenido de texto del item actual
+    const renderer = new AdvancedTextRenderer(pdf, textIndent, y, margin + maxWidth);
+    renderer.setFont(11, 'normal', 'normal');
+    pdf.setTextColor(0, 0, 0);
+    await renderer.addInlineContent(tempContainer);
+    
+    // Actualizar la posición Y después de renderizar el texto
+    y = renderer.getCurrentY() + 3; // Pequeño espacio antes de sublistas
+    
+    // Procesar sublistas si existen
+    if (nestedLists.length > 0) {
+      for (let nestedList of nestedLists) {
+        // Procesar recursivamente la sublista con nivel incrementado
+        y = await processList(pdf, nestedList, margin, y, maxWidth, level + 1);
+      }
+      // Añadir espacio después de las sublistas
+      y += 2;
+    } else {
+      // Si no hay sublistas, añadir menos espacio
+      y += 1;
+    }
   }
   
-  return y + 5;
+  return y;
 }
 
 async function processTable(pdf, element, y, maxWidth) {
