@@ -90,6 +90,7 @@ body {
     align-items: center;
     gap: 6px;
     min-height: 32px;
+    border-radius: 5px;
 }
 
 .btn:hover {
@@ -124,6 +125,7 @@ body {
     outline: none;
     transition: border-color 0.2s ease;
     min-width: 150px;
+    border-radius: 5px;
 }
 
 .filename-input:focus {
