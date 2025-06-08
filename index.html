@@ -5,33 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Markdown to PDF Editor</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="./node_modules/mathjax/es5/tex-svg-full.js" async></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js"></script>
     <script src="https://kit.fontawesome.com/4bf0ac964c.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    
+    <!-- Solo las librerías esenciales -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.0.10/marked.min.js"></script>
+    
+    <!-- MathJax configuración limpia -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <img src="MDPDF.png" alt="LogoMDPDF" class="logo">
             <div class="header-name">
-            <h1>MDPDF</h1>
-        </div>
-            <div class="header-info"><a href="https://github.com/Inled-Group/mdpdf"><i class="fa-brands fa-github"></i></a></div>
+                <h1>MDPDF</h1>
+            </div>
+            <div class="header-info">
+                <a href="https://github.com/Inled-Group/mdpdf">GitHub</a>
+            </div>
         </div>
 
         <div class="ribbon">
             <div class="ribbon-group">
-                <input type="text" id="filename" class="filename-input" placeholder="Nombre del archivo">
+                <input type="text" id="filename" class="filename-input" placeholder="Nombre del archivo" value="documento">
             </div>
             <div class="ribbon-group">
                 <button class="btn btn-primary" onclick="downloadPDF()">
-                    <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
+                    <i class="fa-solid fa-file-pdf"></i>Exportar a PDF
                 </button>
                 <button class="btn" onclick="insertExample()">
                     Insertar ejemplo
@@ -39,7 +59,7 @@
             </div>
             <div class="ribbon-group">
                 <button class="btn" onclick="clearEditor()">
-                    <i class="fa-solid fa-trash"></i> Limpiar todo
+                    <i class="fa-solid fa-trash"></i>Limpiar todo
                 </button>
             </div>
         </div>
@@ -68,7 +88,7 @@ function ejemplo() {
 }
 ```
 
-> Cita importante con matemáticas: $\lim_{x \to 0} \frac{\sin x}{x} = 1$
+> Cita importante
 
 | Función | Derivada |
 |---------|----------|
@@ -83,7 +103,7 @@ function ejemplo() {
         </div>
 
         <div class="status-bar">
-            <a href="https://github.com/Inled-Group/mdpdf/pulls">Reportar error</a>
+            <a href="https://github.com/Inled-Group/mdpdf/issues">Reportar error</a>
             <span id="word-count">0 palabras</span>
         </div>
     </div>
@@ -92,5 +112,9 @@ function ejemplo() {
         <div class="spinner"></div>
         <p>Generando PDF...</p>
     </div>
+
+    <script>
+
+    </script>
 </body>
 </html>
